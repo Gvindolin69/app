@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private LinearLayout paintLayout;
     private DrawingView drawView;
     private Bitmap screenShoot;
-    private Stack<Bitmap> screenShoots = new Stack<>();
+    private Stack<byte[]> screenShoots = new Stack<>();
 
     //init buttons
     private void setupButtons(){
@@ -194,7 +194,37 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         paintLayout = (LinearLayout)findViewById(R.id.current_color);
         paintLayout.setBackgroundColor(drawView.getColor());
 
-        drawView.setDrawingCacheEnabled(true);
+        Thread thread = new Thread(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void run() {
+                while (true){
+                    try {
+                        drawView.setDrawingCacheEnabled(true);
+                        if(drawView.getDrawingCache() != null){
+                            screenShoot = drawView.getDrawingCache();
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            screenShoot.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            byte[] bytes = stream.toByteArray();
+
+                            if(screenShoots.size() != 0){
+
+
+                            }else screenShoots.push(bytes);
+                        }
+                        drawView.destroyDrawingCache();
+                        System.out.println(screenShoots);
+                    }catch (Exception e){
+                        System.out.println("pizdec");
+                    }
+                }
+            }
+        };
+        thread.setDaemon(true);
+        thread.start();
+
+
+
 
     }
 
