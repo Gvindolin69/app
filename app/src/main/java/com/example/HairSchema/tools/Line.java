@@ -6,12 +6,25 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.view.MotionEvent;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 public class Line extends Shape{
     //for doted line
-    private float[] dots = {50, 50};
+    private float[] dots = {20, 20};
+    private Stack<Shape> shapes;
+
+    public Line(Stack<Shape> shapes) {
+        this.shapes = shapes;
+    }
+
+    public Line() {
+    }
+
     public float[] getDots() {
         return dots;
     }
+
 
     public boolean onTouchEventLine(MotionEvent event, Paint paint, Canvas canvas, Path path) {
         float touchX = event.getX();
@@ -63,4 +76,6 @@ public class Line extends Shape{
         }
         return true;
     }
+
+
 }

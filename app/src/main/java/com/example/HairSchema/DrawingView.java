@@ -20,7 +20,9 @@ import com.example.HairSchema.tools.Arrow;
 import com.example.HairSchema.tools.Brush;
 import com.example.HairSchema.tools.Eraser;
 import com.example.HairSchema.tools.Line;
+import com.example.HairSchema.tools.Shape;
 import com.example.HairSchema.tools.SmoothLine;
+import com.example.HairSchema.tools.Undo;
 
 import java.util.Stack;
 
@@ -39,12 +41,14 @@ public class DrawingView extends View {
     private float brushSize, lastBrushSize;
 
     //tools
+    private final Stack<Shape> shapes = new Stack<>();
     private String tool = "default";
-    private final Line line = new Line();
+    private final Line line = new Line(shapes);
     private final Arrow arrow = new Arrow();
     private final SmoothLine smoothLine = new SmoothLine();
     private final Brush brush = new Brush();
     private final Eraser eraser = new Eraser();
+
 
     private Stack<Bitmap> screens;
 
@@ -80,11 +84,6 @@ public class DrawingView extends View {
 
         brushSize = getResources().getInteger(R.integer.medium_size);
         lastBrushSize = brushSize;
-        //
-        //
-        //
-        screens = new Stack<>();
-        screens.push(canvasBitmap);
 
     }
 
@@ -116,9 +115,9 @@ public class DrawingView extends View {
 
             //line
         } else if (tool.equals("line")) {
-            if(line.onTouchEventLine(event, drawPaint, drawCanvas, drawPath)) {
-                screens.push(canvasBitmap);
-            }
+            line.onTouchEventLine(event, drawPaint, drawCanvas, drawPath);
+
+
             //doted_line
         } else if (tool.equals("dotedLine")) {
         //TODO::изменить на включения стиля пунктира для всех инстурментов!!(а может и не изменить)
@@ -174,8 +173,15 @@ public class DrawingView extends View {
         invalidate();
     }
 
-    public Stack<Bitmap> getScreens(){
-        return screens;
+    public Stack<Shape> getShapes() {
+        return shapes;
     }
 
+    public Paint getDrawPaint() {
+        return drawPaint;
+    }
+
+    public Canvas getDrawCanvas() {
+        return drawCanvas;
+    }
 }

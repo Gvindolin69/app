@@ -37,4 +37,14 @@ public abstract class Shape {
     public void setEndY(float endY) {
         this.endY = endY;
     }
+
+    @Override
+    public String toString() {
+        return "Shape{" +
+                "startX=" + startX +
+                ", startY=" + startY +
+                ", endX=" + endX +
+                ", endY=" + endY +
+                '}';
+    }
 }

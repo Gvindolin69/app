@@ -164,7 +164,7 @@ public class Dialogs {
     private static void setupBrushes(){
         smallBrush = 3;
         mediumBrush = 5;
-        largeBrush = 10;
+        largeBrush = 8;
     }
 
     //size dialog
@@ -218,7 +218,7 @@ public class Dialogs {
         leftFaceBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                view.setBackgroundResource(R.drawable.face);
+                view.setBackgroundResource(R.drawable.left_side);
                 dialog.dismiss();
             }
         });
@@ -226,7 +226,7 @@ public class Dialogs {
         rightFaceBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                view.setBackgroundResource(R.drawable.face);
+                view.setBackgroundResource(R.drawable.right_side);
                 dialog.dismiss();
             }
         });
@@ -234,7 +234,15 @@ public class Dialogs {
         aboveFaceBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                view.setBackgroundResource(R.drawable.face);
+                view.setBackgroundResource(R.drawable.head_above);
+                dialog.dismiss();
+            }
+        });
+        ImageButton napeBtn = (ImageButton)dialog.findViewById(R.id.nape);
+        napeBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                view.setBackgroundResource(R.drawable.nape);
                 dialog.dismiss();
             }
         });

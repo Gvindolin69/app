@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="horizontal"
+    android:background="#d6d7d7"
     android:padding="5dp"
     >
 
@@ -12,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:src="@drawable/full_face" />
+        android:src="@drawable/face_icon" />
 
     <ImageButton
         android:id="@+id/face_above"
@@ -26,13 +27,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:src="@drawable/right_face" />
+        android:src="@drawable/right_side_icon" />
 
     <ImageButton
         android:id="@+id/left_face"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:src="@drawable/left_face" />
+        android:src="@drawable/left_side_icon" />
+    <ImageButton
+        android:id="@+id/nape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:src="@drawable/nape_icon" />
 
 </LinearLayout>

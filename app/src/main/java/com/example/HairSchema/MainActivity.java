@@ -1,16 +1,21 @@
 package com.example.HairSchema;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import android.os.Bundle;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
 import java.util.UUID;
 import android.provider.MediaStore;
 import android.app.AlertDialog;
@@ -20,14 +25,16 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.example.HairSchema.things.Dialogs;
-import com.example.HairSchema.things.ScreenThread;
+import com.example.HairSchema.tools.Line;
+import com.example.HairSchema.tools.Shape;
+import com.example.HairSchema.tools.Undo;
 
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
     private LinearLayout paintLayout;
     private DrawingView drawView;
     private Bitmap screenShoot;
-    private ArrayList<Bitmap> screenShoots;
+    private Stack<Bitmap> screenShoots = new Stack<>();
 
     //init buttons
     private void setupButtons(){
@@ -63,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         ImageButton headBtn = (ImageButton) findViewById(R.id.head_btn);
         headBtn.setOnClickListener(this);
+
+        ImageButton undoBtn = (ImageButton) findViewById(R.id.undo_btn);
+        undoBtn.setOnClickListener(this);
 
     }
 
@@ -107,8 +117,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }else if(view.getId()==R.id.smoothLine_btn) {
             drawView.setTool("smoothLine");
 
-        }else if(view.getId()==R.id.erase_btn){
+        }else if(view.getId()==R.id.erase_btn) {
             drawView.setTool("eraser");
+
+        }else if(view.getId()==R.id.undo_btn){
+
 
         }else if(view.getId()==R.id.new_btn){
             //new button
@@ -181,12 +194,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         paintLayout = (LinearLayout)findViewById(R.id.current_color);
         paintLayout.setBackgroundColor(drawView.getColor());
 
-
-
-        ScreenThread screenThread = new ScreenThread(drawView, screenShoot);
-        screenThread.setDaemon(true);
-        screenThread.start();
-
+        drawView.setDrawingCacheEnabled(true);
 
     }
 
