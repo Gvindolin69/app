@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         drawView.destroyDrawingCache();
                         System.out.println(screenShoots);
                     }catch (Exception e){
-                        System.out.println("pizdec");
+                        System.out.println("opyat' mimo");
                     }
                 }
             }
