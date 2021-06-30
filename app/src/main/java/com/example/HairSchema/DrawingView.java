@@ -3,6 +3,7 @@ package com.example.HairSchema;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import android.graphics.Bitmap;
@@ -22,9 +23,8 @@ import com.example.HairSchema.tools.Eraser;
 import com.example.HairSchema.tools.Line;
 import com.example.HairSchema.tools.Shape;
 import com.example.HairSchema.tools.SmoothLine;
-import com.example.HairSchema.tools.Undo;
+import java.util.ArrayList;
 
-import java.util.Stack;
 
 public class DrawingView extends View {
     //drawing path
@@ -41,16 +41,14 @@ public class DrawingView extends View {
     private float brushSize, lastBrushSize;
 
     //tools
-    private final Stack<Shape> shapes = new Stack<>();
+    private ArrayList<Shape> shapes = new ArrayList<>();
     private String tool = "default";
     private final Line line = new Line(shapes);
-    private final Arrow arrow = new Arrow();
-    private final SmoothLine smoothLine = new SmoothLine();
-    private final Brush brush = new Brush();
-    private final Eraser eraser = new Eraser();
+    private final Arrow arrow = new Arrow(shapes);
+    private final SmoothLine smoothLine = new SmoothLine(shapes);
+    private final Brush brush = new Brush(shapes);
+    private final Eraser eraser = new Eraser(shapes);
 
-
-    private Stack<Bitmap> screens;
 
     public DrawingView(Context context) {
         super(context);
@@ -61,9 +59,6 @@ public class DrawingView extends View {
         setupDrawing();
     }
 
-    public Bitmap makeScreenShoot(){
-       return canvasBitmap;
-    }
 
     public void setDrawPaint(){
         drawPaint.setColor(paintColor);
@@ -75,6 +70,16 @@ public class DrawingView extends View {
         drawPaint.setStrokeWidth(brushSize);
     }
 
+    public void init(DisplayMetrics metrics) {
+
+        int height = metrics.heightPixels;
+        int width = metrics.widthPixels;
+
+        canvasBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        drawCanvas = new Canvas(canvasBitmap);
+
+    }
+
     public void setupDrawing(){
         drawPath = new Path();
         drawPaint = new Paint();
@@ -84,6 +89,8 @@ public class DrawingView extends View {
 
         brushSize = getResources().getInteger(R.integer.medium_size);
         lastBrushSize = brushSize;
+
+
 
     }
 
@@ -102,6 +109,8 @@ public class DrawingView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
     //draw view
+        super.onDraw(canvas);
+
         canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
         canvas.drawPath(drawPath, drawPaint);
     }
@@ -173,15 +182,27 @@ public class DrawingView extends View {
         invalidate();
     }
 
-    public Stack<Shape> getShapes() {
+    public ArrayList<Shape> getShapes() {
         return shapes;
-    }
-
-    public Paint getDrawPaint() {
-        return drawPaint;
     }
 
     public Canvas getDrawCanvas() {
         return drawCanvas;
+    }
+
+    public Paint getCanvasPaint() {
+        return canvasPaint;
+    }
+
+    public void setDrawCanvas(Canvas drawCanvas) {
+        this.drawCanvas = drawCanvas;
+    }
+
+    public Bitmap getCanvasBitmap() {
+        return canvasBitmap;
+    }
+
+    public void setCanvasBitmap(Bitmap canvasBitmap) {
+        this.canvasBitmap = canvasBitmap;
     }
 }

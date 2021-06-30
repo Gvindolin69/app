@@ -6,10 +6,17 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.view.MotionEvent;
 
+import java.util.ArrayList;
+
 public class SmoothLine extends Shape{
     int countTouch = 0;
     float quadX = 0;
     float quadY = 0;
+
+    public SmoothLine(ArrayList<Shape> shapes) {
+        super(shapes);
+    }
+
 
     public boolean onTouchEventSmoothLine(MotionEvent event, Paint paint, Canvas canvas, Path path) {
         float touchX = event.getX();

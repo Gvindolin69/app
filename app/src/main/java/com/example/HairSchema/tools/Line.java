@@ -12,13 +12,9 @@ import java.util.Stack;
 public class Line extends Shape{
     //for doted line
     private float[] dots = {20, 20};
-    private Stack<Shape> shapes;
 
-    public Line(Stack<Shape> shapes) {
-        this.shapes = shapes;
-    }
-
-    public Line() {
+    public Line(ArrayList<Shape> shapes) {
+        super(shapes);
     }
 
     public float[] getDots() {

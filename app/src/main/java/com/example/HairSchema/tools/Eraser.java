@@ -9,7 +9,14 @@ import android.view.MotionEvent;
 
 import com.example.HairSchema.DrawingView;
 
+import java.util.ArrayList;
+
 public class Eraser extends Shape{
+
+
+    public Eraser(ArrayList<Shape> shapes) {
+        super(shapes);
+    }
 
     public boolean onTouchEventEraser(MotionEvent event, Paint paint, Canvas canvas, Path path, DrawingView view) {
         float touchX = event.getX();

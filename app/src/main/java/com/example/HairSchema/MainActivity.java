@@ -1,20 +1,17 @@
 package com.example.HairSchema;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.graphics.Bitmap;
-import android.os.Build;
+import android.graphics.Canvas;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import android.os.Bundle;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Stack;
 import java.util.UUID;
 import android.provider.MediaStore;
@@ -25,16 +22,18 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.example.HairSchema.things.Dialogs;
-import com.example.HairSchema.tools.Line;
-import com.example.HairSchema.tools.Shape;
-import com.example.HairSchema.tools.Undo;
+import com.example.HairSchema.things.Memento;
 
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
     private LinearLayout paintLayout;
     private DrawingView drawView;
     private Bitmap screenShoot;
-    private Stack<byte[]> screenShoots = new Stack<>();
+    private Memento memento;
+    private Stack<Bitmap> screenShoots = new Stack<>();
+    private int count;
+    //private Undo undo = new Undo(drawView, screenShoots);
+
 
     //init buttons
     private void setupButtons(){
@@ -121,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             drawView.setTool("eraser");
 
         }else if(view.getId()==R.id.undo_btn){
-
+            screenShoots.pop();
+            drawView.setDrawCanvas(new Canvas(screenShoots.peek()));
 
         }else if(view.getId()==R.id.new_btn){
             //new button
@@ -187,6 +187,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         //canvas for drawing
         drawView = (DrawingView)findViewById(R.id.drawing);
 
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        drawView.init(metrics);
+
         //brushes and default brush size
         drawView.setBrushSize(getResources().getInteger(R.integer.small_size));
 
@@ -194,26 +198,24 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         paintLayout = (LinearLayout)findViewById(R.id.current_color);
         paintLayout.setBackgroundColor(drawView.getColor());
 
+        count = 0;
+
+        Bitmap bitmap = drawView.getCanvasBitmap();
+        System.out.println(bitmap);
+        memento = new Memento(bitmap);
         Thread thread = new Thread(){
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void run() {
+            public void run(){
                 while (true){
                     try {
-                        drawView.setDrawingCacheEnabled(true);
-                        if(drawView.getDrawingCache() != null){
-                            screenShoot = drawView.getDrawingCache();
-                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                            screenShoot.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                            byte[] bytes = stream.toByteArray();
-
-                            if(screenShoots.size() != 0){
-
-
-                            }else screenShoots.push(bytes);
-                        }
-                        drawView.destroyDrawingCache();
-                        System.out.println(screenShoots);
+                        if(screenShoots.size() != 0){
+                            if(drawView.getShapes().size() > count){
+                                count = drawView.getShapes().size();
+                                memento.setState(bitmap);
+                                screenShoots.push(memento.getState());
+                                System.out.println(screenShoots);
+                            }
+                        }else screenShoots.push(memento.getState());
                     }catch (Exception e){
                         System.out.println("opyat' mimo");
                     }

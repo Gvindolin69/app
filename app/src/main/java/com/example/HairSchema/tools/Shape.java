@@ -1,10 +1,17 @@
 package com.example.HairSchema.tools;
 
+import java.util.ArrayList;
+
 public abstract class Shape {
+    protected ArrayList<Shape> shapes;
     private float startX;
     private float startY;
     private float endX;
     private float endY;
+
+    public Shape(ArrayList<Shape> shapes) {
+        this.shapes = shapes;
+    }
 
     public float getStartX() {
         return startX;

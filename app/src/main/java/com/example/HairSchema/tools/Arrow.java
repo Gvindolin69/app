@@ -6,9 +6,15 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.view.MotionEvent;
 
+import java.util.ArrayList;
+
 public class Arrow extends Shape {
     private final float radius = 50;
     private final float angle = 30;
+
+    public Arrow(ArrayList<Shape> shapes) {
+        super(shapes);
+    }
 
     public void drawArrow(Paint paint, Canvas canvas, float from_x, float from_y, float to_x, float to_y) {
         float anglerad, lineangle;
